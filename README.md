@@ -44,9 +44,10 @@ We prioritize user experience, data security, scalability, and tech feasibility,
 * Node.js: For handling server-side operations and API endpoints.
 * Express.js: For managing routes and middleware, including user authentication.
 * Three.js: A cross-browser JavaScript library and API for creating and displaying animated 3D graphics in a web browser, used in conjunction with A-Frame for enhanced 3D capabilities.
+* EmailJS: Provides a comprehensive suite of cloud-based tools for app development, including real-time database capabilities
 
 ### Database:
-* MongoDB: A NoSQL database used for storing user data, shopping cart details, and other application-related information securely and efficiently.
+* Firebase: Enables sending emails directly from client-side applications without needing a server.
 
 ## Future Enhancements
 
