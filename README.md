@@ -4,7 +4,7 @@
 
 In the rapidly evolving world of retail, personalization and immersive experiences have become crucial in enhancing customer engagement and loyalty. Emerging technologies like Augmented Reality (AR) and Virtual Reality (VR) have opened new opportunities to create unique, customized shopping experiences, both in-store and online.
 
-This project focuses on building a metaverse application that leverages web technology, A-Frame, and Node.js to deliver a personalized and immersive shopping experience. The application allows users to explore a virtual retail environment, interact with 3D models of products, and manage their shopping cart. Additionally, user authorization and authentication are implemented to ensure secure access.
+This project focuses on building a metaverse application that leverages web technology such as A-Frame, and Node.js to deliver a personalized and immersive shopping experience. The application allows users to explore a virtual retail environment, interact with 3D models of products, and manage their shopping cart. Additionally, user authorization and authentication are implemented to ensure secure access.
 
 ## Problem Theme
 
