@@ -1,68 +1,149 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Your Cart</title>
-  <style>
-    body, html {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
-    }
-    #cart-container {
-      padding: 20px;
-      max-width: 600px;
-      margin: 0 auto;
-      background-color: #fff;
-      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    }
-    h1 {
-      font-size: 24px;
-      text-align: center;
-    }
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-    li {
-      padding: 10px;
-      border-bottom: 1px solid #ddd;
-      display: flex;
-      justify-content: space-between;
-    }
-    #total {
-      text-align: right;
-      font-weight: bold;
-      padding: 10px 0;
-    }
-  </style>
+    <meta charset="utf-8">
+    <title>Cart</title>
+    <meta name="description" content="Shopping Cart">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f0f0;
+        }
+        #header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        #title {
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+        }
+        #cart-items {
+            margin: 80px 20px 20px; /* Adjusted for fixed header */
+        }
+        #checkout-form {
+            margin: 20px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .form-group input[type="radio"] {
+            width: auto;
+            margin-right: 10px;
+        }
+        .form-group button {
+            background: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .form-group button:hover {
+            background: #0056b3;
+        }
+        .thank-you {
+            display: none;
+            text-align: center;
+            padding: 50px;
+            font-size: 24px;
+            color: #007BFF;
+        }
+    </style>
 </head>
 <body>
-  <div id="cart-container">
-    <h1>Your Cart</h1>
-    <ul id="cart-items"></ul>
-    <div id="total"></div>
-  </div>
+    <div id="header">
+        <div id="title">Your Cart</div>
+        <button onclick="window.location.href='index.html'">Back to Shop</button>
+    </div>
 
-  <script>
-    function loadCart() {
-      const cart = JSON.parse(localStorage.getItem('cart')) || [];
-      const cartItems = document.getElementById('cart-items');
-      const totalDiv = document.getElementById('total');
-      let total = 0;
+    <div id="cart-items">
+        <!-- Cart items will be dynamically inserted here -->
+    </div>
 
-      cart.forEach(item => {
-        const li = document.createElement('li');
-        li.textContent = item.item + " - $" + item.price;
-        cartItems.appendChild(li);
-        total += item.price;
-      });
+    <div id="checkout-form">
+        <h2>Checkout</h2>
+        <form id="payment-form">
+            <div class="form-group">
+                <label for="address">Delivery Address</label>
+                <textarea id="address" name="address" rows="4" required></textarea>
+            </div>
+            <div class="form-group">
+                <label>Payment Option</label>
+                <input type="radio" id="credit-card" name="payment" value="Credit Card" checked>
+                <label for="credit-card">Credit Card</label>
+                <input type="radio" id="cash-on-delivery" name="payment" value="Cash on Delivery">
+                <label for="cash-on-delivery">Cash on Delivery</label>
+            </div>
+            <div class="form-group">
+                <button type="submit">Place Order</button>
+            </div>
+        </form>
+    </div>
 
-      totalDiv.textContent = "Total: $" + total;
-    }
+    <div id="thank-you" class="thank-you">
+        Thank you for your order! 🎉
+    </div>
 
-    window.onload = loadCart;
-  </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+            const cartItemsDiv = document.getElementById('cart-items');
+
+            if (cartItems.length === 0) {
+                cartItemsDiv.innerHTML = '<p>Your cart is empty.</p>';
+            } else {
+                let total = 0;
+                cartItems.forEach(item => {
+                    cartItemsDiv.innerHTML += `<p>${item.item} - $${item.price}</p>`;
+                    total += item.price;
+                });
+                cartItemsDiv.innerHTML += `<h3>Total: $${total}</h3>`;
+            }
+
+            const paymentForm = document.getElementById('payment-form');
+            paymentForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const address = document.getElementById('address').value;
+                const paymentOption = document.querySelector('input[name="payment"]:checked').value;
+
+                // Here you could handle form submission to a server if needed.
+
+                localStorage.removeItem('cart'); // Clear cart after order
+                document.getElementById('checkout-form').style.display = 'none';
+                document.getElementById('thank-you').style.display = 'block';
+            });
+        });
+    </script>
 </body>
 </html>
