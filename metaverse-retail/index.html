@@ -1,121 +1,220 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <title>3D Shopping Experience</title>
     <meta name="description" content="Shopping - A-Frame">
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <style>
-        body,
-        html {
+        body, html {
             margin: 0;
             padding: 0;
-            overflow: hidden;
             height: 100%;
             width: 100%;
             background-color: #f0f0f0;
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
         }
-
-        #title {
-            position: absolute;
-            top: 10px;
+        #header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: #005AA7; /* Walmart Blue */
+            color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        #logo {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+        }
+        #logo img {
+            width: 120px; /* Adjust based on actual logo size */
+            height: auto;
+        }
+        #search-bar {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+        }
+        #search-bar input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        #header-buttons {
+            display: flex;
+            align-items: center;
+        }
+        .icon {
+            background: none;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 5px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .icon img {
+            width: 100%;
+            height: auto;
+        }
+        #cart-button {
+            background: none;
+        }
+        #bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-around;
+            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        .price-tag {
+            background: #007BFF;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+        }
+        .price-tag:hover {
+            background: #0056b3;
+        }
+        a-scene {
+            cursor: none; /* Hide the mouse cursor in A-Frame */
+        }
+        /* Notification styles */
+        .notification {
+            display: none;
+            position: fixed;
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            color: #333;
-            font-size: 24px;
-            text-shadow: 0px 0px 5px #fff;
-        }
-
-        #cart-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            padding: 10px 20px;
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .add-to-cart {
-            position: absolute;
             background-color: #28a745;
-            color: white;
-            border: none;
-            padding: 5px 10px;
+            color: #fff;
+            padding: 10px 20px;
             border-radius: 5px;
-            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            font-size: 16px;
+            z-index: 1001;
+            text-align: center;
+        }
+        .notification.show {
+            display: block;
+            animation: fadeIn 0.5s, fadeOut 0.5s 2.5s; /* Fade in and out animation */
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
         }
     </style>
 </head>
-
 <body>
-    <div id="title">3D Shopping Experience</div>
-    <button id="cart-button" onclick="redirectToCart()">View Cart</button>
-    <a-scene background="color: #ECECEC" renderer="colorManagement: true">
-        <a-assets>
-            <a-asset-item id="man-model" src="./man.glb"></a-asset-item>
-            <a-asset-item id="bowler-model" src="./bowler.glb"></a-asset-item>
-            <a-asset-item id="dresser-model" src="./dresser.glb"></a-asset-item>
-            <a-asset-item id="jacket-model" src="./jacket.glb"></a-asset-item>
-            <a-asset-item id="jeans-model" src="./jeans.glb"></a-asset-item>
-            <a-asset-item id="jersey-model" src="./jersey.glb"></a-asset-item>
-            <a-asset-item id="shirt-model" src="./shirt.glb"></a-asset-item>
-            <a-asset-item id="sneakers-model" src="./sneakers.glb"></a-asset-item>
-        </a-assets>
+    <div id="header">
+        <div id="logo">
+            <h1>VRetail Innovators</h1>
+        </div>
+        <div id="search-bar">
+            <input type="text" placeholder="Search for products" />
+        </div>
+        <div id="header-buttons">
+            <button class="icon" onclick="window.location.href='login.html'">
+                <img src="./login-7.png" alt="Login Icon" />
+            </button>
+            <button class="icon" onclick="window.location.href='register.html'">
+                <img src="./register-14.png" alt="Register Icon" />
+            </button>
+            <button class="icon" id="cart-button" onclick="redirectToCart()">
+                <img src="./shopping-cart-outline.svg" alt="Cart Icon" />
+            </button>
+        </div>
+    </div>
 
-        <!-- Man Model -->
-        <a-entity id="man" position="0 -1 -3" rotation="0 0 0" animation="property: rotation; to: 0 360 0; dur: 10000; loop: true">
-            <a-gltf-model src="#man-model" scale="1.5 1.5 1.5"></a-gltf-model>
-        </a-entity>
+    <div id="scene-container">
+        <a-scene background="color: #ECECEC" renderer="colorManagement: true">
+            <a-assets>
+                <a-asset-item id="man-model" src="./man.glb"></a-asset-item>
+                <a-asset-item id="bowler-model" src="./oculos.obj.glb""></a-asset-item>
+                <a-asset-item id="dresser-model" src="./dresser.glb"></a-asset-item>
+                <a-asset-item id="jacket-model" src="./jacket.glb"></a-asset-item>
+                <a-asset-item id="jeans-model" src="./jeans.glb"></a-asset-item>
+                <a-asset-item id="jersey-model" src="./jersey.glb"></a-asset-item>
+                <a-asset-item id="shirt-model" src="./shirt.glb"></a-asset-item>
+                <a-asset-item id="sneakers-model" src="./sneakers.glb"></a-asset-item>
+            </a-assets>
+    
+            <!-- Man Model -->
+            <a-entity id="man" position="0 -1 -3" rotation="0 0 0">
+                <a-gltf-model src="#man-model" scale="1.5 1.5 1.5"></a-gltf-model>
+            </a-entity>
+    
+            <!-- Cylinder Behind Objects -->
+            <a-cylinder position="0 0.5 -3" radius="4" height="1.6" side="back" open-ended="true" color="#FFF"></a-cylinder>
+    
+            <!-- 3D Models -->
+            <a-gltf-model id="bowler" src="#bowler-model" position="0 0 -2" scale="1.2 1.2 1.2"></a-gltf-model>
+            <a-gltf-model id="dresser" src="#dresser-model" position="-2 0 -3" scale="2.5 2.5 2.5"></a-gltf-model>
+            <a-gltf-model id="jacket" src="#jacket-model" position="0.5 1.5 -0.5" scale="1.2 1.2 1.2"></a-gltf-model>
+            <a-gltf-model id="jeans" src="#jeans-model" position="1.5 0 -1.5" scale="1.2 1.2 1.2"></a-gltf-model>
+            <a-gltf-model id="jersey" src="#jersey-model" position="3 0 -2" scale="1.2 1.2 1.2"></a-gltf-model>
+            <a-gltf-model id="shirt" src="#shirt-model" position="-3 0 -4" scale="1.2 1.2 1.2"></a-gltf-model>
+            <a-gltf-model id="sneakers" src="#sneakers-model" position="3 0 -4" scale="1.2 1.2 1.2"></a-gltf-model>
+    
+            <a-light type="directional" color="#fff" intensity="0.5" position="-1 2 1"></a-light>
+            <a-light type="ambient" color="#fff" intensity="0.5"></a-light>
+    
+            
+        </a-scene>
+    </div>
 
-        <!-- Cylinder Behind Objects -->
-        <a-cylinder position="0 0.5 -3" radius="4" height="1.6" side="back" open-ended="true" color="#FFF"></a-cylinder>
+    <div id="bottom-bar">
+        <span class="price-tag" onclick="addToCart('Bowler', 20)">Googles - $20</span>
+        <span class="price-tag" onclick="addToCart('Dresser', 50)">Dresser - $50</span>
+        <span class="price-tag" onclick="addToCart('Jacket', 30)">Jacket - $30</span>
+        <span class="price-tag" onclick="addToCart('Jeans', 40)">Jeans - $40</span>
+        <span class="price-tag" onclick="addToCart('Jersey', 25)">Jersey - $25</span>
+        <span class="price-tag" onclick="addToCart('Shirt', 15)">Shirt - $15</span>
+        <span class="price-tag" onclick="addToCart('Sneakers', 20)">Sneakers - $20</span>
+    </div>
 
-        <!-- Bowler -->
-        <a-gltf-model id="bowler" src="#bowler-model" position="-3 0 -2" scale="1.2 1.2 1.2"></a-gltf-model>
-        <button class="add-to-cart" style="top: 220px; left: 100px;" onclick="addToCart('Bowler', 20)">Add to Cart</button>
-
-        <!-- Dresser -->
-        <a-gltf-model id="dresser" src="#dresser-model" position="-2 0 -3" scale="2.5 2.5 2.5"></a-gltf-model>
-        <button class="add-to-cart" style="top: 220px; left: 80px;" onclick="addToCart('Dresser', 50)">Add to Cart</button>
-
-        <!-- Jacket -->
-        <a-gltf-model id="jacket" src="#jacket-model" position="0.5 1.5 -0.5" scale="1.2 1.2 1.2"></a-gltf-model>
-        <button class="add-to-cart" style="top: 330px; left: 80px;" onclick="addToCart('Jacket', 30)">Add to Cart</button>
-
-        <!-- Jeans -->
-        <a-gltf-model id="jeans" src="#jeans-model" position="1.5 0 -1.5" scale="1.2 1.2 1.2"></a-gltf-model>
-        <button class="add-to-cart" style="top: 410px; left: 80px;" onclick="addToCart('Jeans', 40)">Add to Cart</button>
-
-        <!-- Jersey -->
-        <a-gltf-model id="jersey" src="#jersey-model" position="3 0 -2" scale="1.2 1.2 1.2"></a-gltf-model>
-        <button class="add-to-cart" style="top: 490px; left: 80px;" onclick="addToCart('Jersey', 25)">Add to Cart</button>
-
-        <!-- Shirt -->
-        <a-gltf-model id="shirt" src="#shirt-model" position="-3 0 -4" scale="1.2 1.2 1.2"></a-gltf-model>
-        <button class="add-to-cart" style="top: 570px; left: 80px;" onclick="addToCart('Shirt', 15)">Add to Cart</button>
-
-        <!-- Sneakers -->
-        <a-gltf-model id="sneakers" src="#sneakers-model" position="3 0 -4" scale="1.2 1.2 1.2"></a-gltf-model>
-        <button class="add-to-cart" style="top: 650px; left: 80px;" onclick="addToCart('Sneakers', 20)">Add to Cart</button>
-
-        <a-light type="directional" color="#fff" intensity="0.5" position="-1 2 1"></a-light>
-        <a-light type="ambient" color="#fff" intensity="0.5"></a-light>
-    </a-scene>
+    <div id="notification" class="notification"></div>
 
     <script>
         let cart = [];
 
         function addToCart(item, price) {
-            cart.push({
-                item,
-                price
-            });
-            alert(item + " added to cart!");
+            cart.push({ item, price });
+            showNotification(item + " added to cart! 🛒");
+        }
+
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000); // Hide after 3 seconds
         }
 
         function redirectToCart() {
@@ -124,5 +223,4 @@
         }
     </script>
 </body>
-
 </html>
