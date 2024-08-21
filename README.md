@@ -48,6 +48,7 @@ We prioritize user experience, data security, scalability, and tech feasibility,
 
 ### Database:
 * Firebase: Enables sending emails directly from client-side applications without needing a server.
+* MongoDB
 
 ## Future Enhancements
 
