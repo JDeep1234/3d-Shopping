@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Register</title>
+    <meta name="description" content="Register Page">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #0056a0, #0071ce); /* Walmart colors */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            width: 320px;
+            text-align: center;
+            position: relative;
+        }
+        h2 {
+            color: #0071ce; /* Walmart blue */
+            margin-bottom: 20px;
+        }
+        input {
+            margin-bottom: 15px;
+            width: calc(100% - 20px);
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        button {
+            padding: 12px;
+            background-color: #0071ce; /* Walmart blue */
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056a0;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            width: 280px;
+            text-align: center;
+        }
+        .modal button {
+            background-color: #0071ce; /* Walmart blue */
+            border: none;
+            color: #ffffff;
+            padding: 12px 20px;
+            cursor: pointer;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .modal button:hover {
+            background-color: #0056a0;
+        }
+        .modal .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 20px;
+            color: #0071ce;
+        }
+        #success-modal {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Register</h2>
+        <input type="text" id="register-name" placeholder="Name" />
+        <input type="email" id="register-email" placeholder="Email" />
+        <input type="password" id="register-password" placeholder="Password" />
+        <input type="tel" id="register-phone" placeholder="Phone Number" />
+        <button onclick="register()">Register</button>
+    </div>
+
+    <!-- Error Modal -->
+    <div id="error-modal" class="modal">
+        <span class="close" onclick="closeModal('error-modal')">&times;</span>
+        <p id="error-message"></p>
+        <button onclick="closeModal('error-modal')">OK</button>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="modal">
+        <span class="close" onclick="closeModal('success-modal')">&times;</span>
+        <p>Registration successful! 🎉</p>
+        <button onclick="redirect()">OK</button>
+    </div>
+
+    <script>
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+
+        function register() {
+            const name = document.getElementById('register-name').value.trim();
+            const email = document.getElementById('register-email').value.trim();
+            const password = document.getElementById('register-password').value.trim();
+            const phone = document.getElementById('register-phone').value.trim();
+
+            if (!name || !email || !password || !phone) {
+                showError("All fields are required.");
+                return;
+            }
+
+            if (users.some(user => user.email === email)) {
+                showError("User already registered.");
+            } else {
+                users.push({ name, email, password, phone });
+                localStorage.setItem('users', JSON.stringify(users));
+                showSuccess();
+            }
+        }
+
+        function showError(message) {
+            document.getElementById('error-message').innerText = message;
+            document.getElementById('error-modal').style.display = 'block';
+        }
+
+        function showSuccess() {
+            document.getElementById('success-modal').style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function redirect() {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
